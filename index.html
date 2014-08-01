@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+    <title>UI Designer / версия 0.307</title>
+    <script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.8.20.custom.min.js"></script>
+	
+	<script type="text/javascript" src="fg.menu.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/south-street/jquery-ui-1.8.20.custom.css" media="screen" />
+	<link type="text/css" href="fg.menu.css" media="screen" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="editorStyle.css" media="screen" />
+
+	<script type="text/javascript" src="underscore-min.js"></script>
+	<script type="text/javascript" src="handlebars-1.0.0.js"></script>
+		<!-- шаблоны вывода -->
+	<script type="text/javascript" src="templates.js"></script>
+
+	<script type="text/javascript" src="editorPlugin.js"></script>
+		<!-- ооп блоков и редактора -->
+	<script type="text/javascript" src="editorClasses.js"></script>
+		<!-- шаблонизатор -->
+
+		<!-- свойства полей : потом будет в базе -->
+	<script type="text/javascript" src="sampledata.js"></script>
+	
+	
+ 
+	<script type="text/javascript">
+		
+		//наименования label'ов
+		var labelCorrelation = {
+							"_type"         : "Тип элемента",
+							"_tag"          : "Html-тег",
+							"name"          : "Аттрибут name",
+							"id"            : "Аттрибут id",
+							"class"         : "Аттрибут class",
+							"required"      : "Аттрибут required",
+							"_label"        : "Подпись",
+							"_additional"   : "Прочие параметры",
+                            "type"          : "Тип",
+                            "classWidth"    : "Относительная ширина",
+                            "classInnerPos" : "Выравнивание внутри"
+
+						};
+
+		//названия элементов в заголовке окна
+		var dialogTitleCorrelation = {
+							"typeLay"          : "контент-блока",
+							"typeFrm"          : "поля ввода",
+							"typeText"         : "текстового элемента",
+							"typeComp"         : "композита"
+						};
+		
+		
+  $(function() {
+		initEditor();	//рисование интерфейса и фнкционал	
+        getHome();		//загрузка базовых блоков
+	});
+	</script>
+
+</head>
+<body>
+<div id="topmenu" class="workPart ui-corner-all">
+	<div class="iner_div">
+		<button class="FileButton">Файл</button>
+		<div id="search-engines" style="display:none;">
+			<ul>
+				<li><span class="uploadBlocks">
+						<span class="ui-button-icon-primary ui-icon ui-icon-folder-collapsed inline-icon"></span>
+						Загрузить
+					</span></li>
+				<li><span class="createBlocks">
+						<span class="ui-button-icon-primary ui-icon ui-icon-circle-plus inline-icon"></span>
+						Создать
+					</span></li>
+				<li><span class="saveHtmlEdit">
+					<span class="ui-button-icon-primary ui-icon ui-icon-disk inline-icon"></span>
+						Сохранить
+					</span></li>
+			</ul>
+		</div>
+		
+		
+		
+		<button class="undoButt iconOnly">&nbsp;</button>
+		<button class="emptyEditor iconOnly">&nbsp;</button>
+		
+		<button class="showHelpInfo rightPos iconOnly">&nbsp;</button>
+		<button class="fullScrToggle rightPos iconOnly">&nbsp;</button>
+		<!--<button> ...</button>-->
+	</div>
+</div>
+
+<div class="sourcecontainer" class="workPart">
+
+	
+    <!-- блок с исходными элементами -->
+	<div id="sourceTabs">
+         <h4 class="pannel">Элементы страницы</h4>
+		<ul class="topswitch">
+			<li><a href="#tabs-1">Верстка</a></li>
+			<li><a href="#tabs-2">Поля</a></li>
+            <li><a href="#tabs-3">Текст</a></li>
+            <li><a href="#tabs-4">Блоки</a></li>
+		</ul>
+		<div id="tabs-1">
+			<div class="sourceContainers typeLay">
+			</div>
+		</div>
+		<div id="tabs-2">
+			<div class="sourceContainers typeFrm">
+			</div>
+		</div>
+        <div id="tabs-3">
+			<div class="sourceContainers typeText">
+			</div>
+		</div>
+        <div id="tabs-4">
+			<div class="sourceContainers typeComp">
+			</div>
+		</div>
+	</div>
+
+    <!-- блок с деревом DOM-элементов -->
+    <div id="sourceTree" class="ui-widget-content ui-corner-all">
+        <h4 class="pannel">Дерево элементов</h4>
+        <span class="ui-icon ui-icon-refresh editBlock" id="float-right-icon"></span>
+	</div>
+
+<!-- блок с свойствами элемента -->
+    <div id="elemAttribs" class="ui-widget-content ui-corner-all">
+        <h4 class="pannel">Свойства </h4>
+        <span class="ui-icon ui-icon-comment infoToConsole" id="float-right-icon"></span>
+        <div id="data-container">
+        </div>
+	</div>
+
+
+
+    <div id="statscontainer" class="workPart">
+	</div>
+	
+	<div id="hiddTopColon">
+	</div>
+</div>
+
+
+
+
+<div class="maincontainer">
+	<div id="tabs">
+		<ul class="topswitch">
+			<li><a href="#tabs-1">Конструктор схемы</a></li>
+			<li><a href="#tabs-3">Превью</a></li>
+			<li><a href="#tabs-2">Server rendered</a></li>
+		</ul>
+		<div id="tabs-1">
+			<div id="maincontainer">
+			</div>
+		</div>
+		<div id="tabs-2">
+			<div id="renderedpart">
+			</div>
+		</div>
+		<div id="tabs-3">
+				<button class="highLightBlocks"> Подсветить блоки</button>
+                <!--<button class="buildTree"> Перестроить дерево</button>-->
+				<br/>
+			<div id="htmlpart">
+			</div>
+			</div>
+	</div>
+</div>
+
+<div id="dialogAdd" title="Добавление элемента" class="workPart">
+	<form name="addAlien" id="addAlien">
+		<label for="tagType">Тип тега</label>
+			<select name="tagType" id="tagType">
+				<option value="input">input</option>
+				<option value="radio">radio</option>
+				<option value="textarea">textarea</option>
+				<option value="select">select</option>
+			</select><br>
+		<label for="tagClass">Классы элемента</label>
+			<input type="text" size="30" name="tagClass">
+			<br>
+		<label for="tagId">Id элемента</label>
+			<input type="text" size="15" name="tagId">
+			<br>
+		<label for="tagName">Name элемента</label>
+					<input type="text" size="15" name="tagName">
+					<br>
+	</form>
+</div>
+
+<div id="dialogEdit" class="workPart">
+	<form name="editAlien" id="editAlien"></form>
+</div>
+
+<div id="temporaryContainer">
+</div> <!-- блок для хранения элементов при переноске -->
+
+<div class="editorInformation ui-widget-content ui-corner-all">
+
+	<p>Горячие клавиши:<br>
+		<strong>F</strong> - показ-скрытие боковой панели<br>
+		<strong>C</strong> - вкладка конструктора<br>
+		<strong>P</strong> - вкладка превью<br>
+		<strong>R</strong> - вкладка сервера<br>
+		<strong>E</strong> - очистка всего проекта
+
+	</p>
+</div>
+
+</body>
+</html>
