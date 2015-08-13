@@ -1,5 +1,13 @@
-This is the first version of browser based UI editor based on Kickstart HTML/CSS bootstrap (http://www.99lime.com/). Editor prototype was developed in mid 2013. It relies in jQuery, jQueryUI and underscoreJS librabies.
+##Drad'and'drop html markup generator
+Browser-based UI editor based on Kickstart HTML/CSS (http://www.99lime.com/).
+Editor prototype was developed in beginning of 2013. 
 
-Project's code needs refactoring. Planned date for global refactoring: 15th August 2014.
+###Dependances
+ - Kickstart HTML/CSS
+ - jQuery
+ - jQueryUI
+ - underscoreJS
+
+*Note: project's code needs heavy refactoring so any development was haulted*
 
 Demo available here: http://quabox.ru/demos/git/editor/index.html
